@@ -62,16 +62,6 @@ describe('user/auth router', function() {
 			expect(res).to.be.json;
 		})
 	})
-  //
-	// it('should retrieve user assignment list on GET', function() {
-	// 	return chai.request(app)
-	// 	.get(`/api/users/assignment/${testUser._id}`)
-	// 	.set("Authorization", `Bearer ${authToken}`)
-	// 	.then(function(res) {
-	// 		expect(res).to.have.status(200);
-	// 		expect(res).to.be.json;
-	// 	})
-	// })
 
 	it('should add playlist on PUT', function() {
 		return chai.request(app)
@@ -92,17 +82,7 @@ describe('user/auth router', function() {
 			expect(res).to.be.json;
 		})
 	})
-// 	it('should remove report from assignment list on PUT', function() {
-// 		return chai.request(app)
-// 		.put(`/api/users/assignment/${testUser._id}`)
-// 		.set("Authorization", `Bearer ${authToken}`)
-// 		.send(["5b7c512d2b73a5573db17391"])
-// 		.then(function(res) {
-// 			expect(res).to.have.status(200);
-// 			expect(res).to.be.json;
-// 		})
-// 	})
-//
+
 	it('should delete user on DELETE', function() {
 		return chai.request(app)
 		.delete(`/api/users/${testUser._id}`)
