@@ -12,25 +12,7 @@ const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-let testUser = {
-    "_id": {
-        "$oid": "5c107bfcfb6fc04dd6eaee06"
-    },
-    "name": {
-        "firstName": "Lucy",
-        "lastName": "Sanders"
-    },
-    "username": "lulu",
-    "password": "password",
-    "savedPlaylists": [
-        "playlist1",
-        "playlist2"
-    ],
-    "savedArtistograms": [
-        "artistogram1",
-        "artistogram2"
-    ]
-};
+let testUser;
 
 let authToken;
 
@@ -58,23 +40,23 @@ describe('user/auth router', function() {
 		})
 	})
 
-	// it('should send token on POST to auth/login', function() {
-	// 	return chai.request(app)
-	// 	.post("/api/auth/login")
-	// 	.send({
-	// 		"username": "testUser",
-	// 		"password": "testPassword"
-	// 	})
-	// 	.then(function(res) {
-	// 		authToken = res.body.authToken;
-	// 		expect(res).to.have.status(200);
-	// 	})
-	// })
+	it('should send token on POST to /login', function() {
+		return chai.request(app)
+		.post("/api/login")
+		.send({
+			"username": "testUser",
+			"password": "testPassword"
+		})
+		.then(function(res) {
+			authToken = res.body.authToken;
+			expect(res).to.have.status(200);
+		})
+	})
 
 	it('should retrieve user on GET', function() {
 		return chai.request(app)
-		.get(`/api/lulu`)
-		// .set("Authorization", `Bearer ${authToken}`)
+		.get(`/api/user/${testUser._id}`)
+		.set("Authorization", `Bearer ${authToken}`)
 		.then(function(res) {
 			expect(res).to.have.status(200);
 			expect(res).to.be.json;
@@ -101,6 +83,15 @@ describe('user/auth router', function() {
 		})
 	})
 
+  it('should add artistogram on PUT', function() {
+		return chai.request(app)
+		.put(`/api/artistograms/${testUser.username}`)
+		.send("artistogram tester")
+		.then(function(res) {
+			expect(res).to.have.status(200);
+			expect(res).to.be.json;
+		})
+	})
 // 	it('should remove report from assignment list on PUT', function() {
 // 		return chai.request(app)
 // 		.put(`/api/users/assignment/${testUser._id}`)
@@ -112,12 +103,12 @@ describe('user/auth router', function() {
 // 		})
 // 	})
 //
-// 	it('should delete user on DELETE', function() {
-// 		return chai.request(app)
-// 		.delete(`/api/users/${testUser._id}`)
-// 		.then(function(res) {
-// 			expect(res).to.be.status(200);
-// 			expect(res).to.be.json;
-// 		})
-// 	})
+	it('should delete user on DELETE', function() {
+		return chai.request(app)
+		.delete(`/api/users/${testUser._id}`)
+		.then(function(res) {
+			expect(res).to.be.status(200);
+			expect(res).to.be.json;
+		})
+	})
 })

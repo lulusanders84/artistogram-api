@@ -1,14 +1,25 @@
+
 const express = require('express');
 const app = express();
-const cors = require('cors');
-const {CLIENT_ORIGIN} = require('./config');
-const PORT = process.env.PORT || 3000;
-const { DATABASE_URL } = require("./config");
-const userRouter = require('./routes/user-router');
-
 const mongoose = require('mongoose');
 
+const cors = require('cors');
+const {CLIENT_ORIGIN} = require('./config');
+
+const PORT = process.env.PORT || 3000;
+const { DATABASE_URL } = require("./config");
+
+const userRouter = require('./routes/user-router');
+const { router: authRouter } = require("./auth/router");
+
+const passport = require('passport');
+const {localStrategy, jwtStrategy } = require("./auth/strategies");
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 app.use('/api', userRouter);
+app.use('/api/login', authRouter);
 
 app.use(
     cors({

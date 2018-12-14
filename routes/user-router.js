@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const { User} = require('../models');
 
 
-// const jwtAuth = passport.authenticate('jwt', {session: false});
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
-router.get('/:id', (req, res) => {
+router.get('/user/:id', jwtAuth, (req, res) => {
   User
-    .findOne({"username": req.params.id})
+    .findOne({"_id": req.params.id})
     .then(user => {
       const userData = {
         username: user.username,
@@ -178,12 +178,13 @@ router.post('/users', jsonParser, (req, res) => {
   });
 });
 });
-//
-// router.delete('/:id', jsonParser, (req, res) => {
-//   User
-//   .findByIdAndDelete(req.params.id)
-//   .then(user => {
-//     res.status(200).json(user);
-//   })
-// });
+
+router.delete('/users/:id', jsonParser, (req, res) => {
+  User
+  .findByIdAndDelete(req.params.id)
+  .then(user => {
+    res.status(200).json(user);
+  })
+});
+
 module.exports = router;
