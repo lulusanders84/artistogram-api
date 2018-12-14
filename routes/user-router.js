@@ -56,7 +56,7 @@ router.put('/artistograms/:id', jsonParser, (req, res) => {
     })
 
 router.post('/users', jsonParser, (req, res) => {
-    const requiredFields = ['username', 'password'];
+    const requiredFields = ['username', 'password', 'email'];
     const missingField = requiredFields.find(field => !(field in req.body));
     if (missingField) {
       return res.status(422).json({
@@ -137,11 +137,12 @@ router.post('/users', jsonParser, (req, res) => {
       });
     }
 
-    let {username, password, firstName = '', lastName = ''} = req.body;
+    let {username, password, email = '', firstName = '', lastName = ''} = req.body;
     // username and password come in pre-trimmed, otherwise we throw an error
     // before this
     firstName = firstName.trim();
     lastName = lastName.trim();
+    email = email.trim();
     User.find({username: username})
       .count()
       .then(count => {
@@ -161,6 +162,7 @@ router.post('/users', jsonParser, (req, res) => {
         .create({
           username: username,
           password: hash,
+          email: email,
           firstName: firstName,
           lastName: lastName,
         })

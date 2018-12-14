@@ -31,6 +31,7 @@ describe('user/auth router', function() {
     .send({
      "username": "testUser",
      "password": "testPassword",
+		 "email": "email@email.com",
      "firstName": "Test",
      "lastName": "User"
      })

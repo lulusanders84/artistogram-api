@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const {CLIENT_ORIGIN} = require('./config');
 
-const PORT = process.env.PORT || 3000;
+const { PORT } = require ('./config');
 const { DATABASE_URL } = require("./config");
 
 const userRouter = require('./routes/user-router');
