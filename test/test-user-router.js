@@ -56,7 +56,7 @@ describe('user/auth router', function() {
 
 	it('should retrieve user on GET', function() {
 		return chai.request(app)
-		.get(`/api/user/${testUser._id}`)
+		.get(`/api/user/${testUser.username}`)
 		.set("Authorization", `Bearer ${authToken}`)
 		.then(function(res) {
 			expect(res).to.have.status(200);
