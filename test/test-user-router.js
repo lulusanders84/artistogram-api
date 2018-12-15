@@ -46,7 +46,8 @@ describe('user/auth router', function() {
 		.post("/api/login")
 		.send({
 			"username": "testUser",
-			"password": "testPassword"
+			"password": "testPassword",
+			"email": "email"
 		})
 		.then(function(res) {
 			authToken = res.body.authToken;
