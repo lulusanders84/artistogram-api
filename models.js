@@ -19,6 +19,14 @@ const userSchema = mongoose.Schema({
   savedArtistograms: []
 });
 
+userSchema.methods.serialize = function() {
+  return {
+    username: this.username || '',
+    savedPlaylists: this.savedPlaylists || '',
+    savedArtistograms: this.savedArtistograms || ''
+  };
+};
+
 userSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
@@ -26,6 +34,7 @@ userSchema.methods.validatePassword = function(password) {
 userSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
+
 
 const User = mongoose.model('User', userSchema);
 

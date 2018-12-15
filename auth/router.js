@@ -25,7 +25,6 @@ router.post('/', localAuth, (req, res) => {
 
   User.findOne({ username: req.body.username })
   .then(user => {
-    console.log(JSON.stringify(user));
     res.status(200).json({
       "authToken": authToken,
       "user": {

@@ -15,21 +15,13 @@ const { router: authRouter } = require("./auth/router");
 const passport = require('passport');
 const {localStrategy, jwtStrategy } = require("./auth/strategies");
 
+app.use(cors());
+
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api', userRouter);
 app.use('/api/login', authRouter);
-
-app.use(
-    cors({
-        origin: CLIENT_ORIGIN
-    })
-);
-
-app.get('/api/*', (req, res) => {
-  res.json({ok: true});
-});
 
 let server;
 

@@ -167,7 +167,7 @@ router.post('/users', jsonParser, (req, res) => {
           lastName: lastName,
         })
     .then(user => {
-      return res.status(201).json(user);
+      return res.status(201).json(user.username);
     })
     .catch(err => {
       // Forward validation errors on to the client, otherwise give a 500
