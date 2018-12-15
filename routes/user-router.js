@@ -56,6 +56,7 @@ router.put('/artistograms/:id', jsonParser, jwtAuth, (req, res) => {
     })
 
 router.post('/users', jsonParser, (req, res) => {
+  console.log(req.body);
     const requiredFields = ['username', 'password', 'email'];
     const missingField = requiredFields.find(field => !(field in req.body));
     if (missingField) {
@@ -183,7 +184,7 @@ router.post('/users', jsonParser, (req, res) => {
 
 router.delete('/users/:id', jsonParser, (req, res) => {
   User
-  .findByIdAndDelete(req.params.id)
+  .findOneAndDelete({username:req.params.id})
   .then(user => {
     res.status(200).json(user);
   })

@@ -1,4 +1,3 @@
-
 "use strict";
 
 const chai = require('chai');
@@ -46,8 +45,7 @@ describe('user/auth router', function() {
 		.post("/api/login")
 		.send({
 			"username": "testUser",
-			"password": "testPassword",
-			"email": "email"
+			"password": "testPassword"
 		})
 		.then(function(res) {
 			authToken = res.body.authToken;
@@ -57,7 +55,7 @@ describe('user/auth router', function() {
 
 	it('should retrieve user on GET', function() {
 		return chai.request(app)
-		.get(`/api/user/${testUser.username}`)
+		.get(`/api/user/${testUser}`)
 		.set("Authorization", `Bearer ${authToken}`)
 		.then(function(res) {
 			expect(res).to.have.status(200);
@@ -67,7 +65,8 @@ describe('user/auth router', function() {
 
 	it('should add playlist on PUT', function() {
 		return chai.request(app)
-		.put(`/api/playlists/${testUser.username}`)
+		.put(`/api/playlists/${testUser}`)
+		.set("Authorization", `Bearer ${authToken}`)
 		.send("playlist tester")
 		.then(function(res) {
 			expect(res).to.have.status(200);
@@ -77,7 +76,8 @@ describe('user/auth router', function() {
 
   it('should add artistogram on PUT', function() {
 		return chai.request(app)
-		.put(`/api/artistograms/${testUser.username}`)
+		.put(`/api/artistograms/${testUser}`)
+		.set("Authorization", `Bearer ${authToken}`)
 		.send("artistogram tester")
 		.then(function(res) {
 			expect(res).to.have.status(200);
@@ -87,7 +87,7 @@ describe('user/auth router', function() {
 
 	it('should delete user on DELETE', function() {
 		return chai.request(app)
-		.delete(`/api/users/${testUser._id}`)
+		.delete(`/api/users/${testUser}`)
 		.then(function(res) {
 			expect(res).to.be.status(200);
 			expect(res).to.be.json;
