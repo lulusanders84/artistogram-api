@@ -11,7 +11,7 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.get('/user/:id', jwtAuth, (req, res) => {
   User
-    .findOne({"_id": req.params.id})
+    .findOne({"username": req.params.id})
     .then(user => {
       const userData = {
         username: user.username,
@@ -25,7 +25,7 @@ router.get('/user/:id', jwtAuth, (req, res) => {
     })
 })
 
-router.put('/playlists/:id', jsonParser, (req, res) => {
+router.put('/playlists/:id', jsonParser, jwtAuth, (req, res) => {
   console.log(req.body);
       User
       .findOneAndUpdate({username: req.params.id}, {$addToSet: {savedPlaylists: req.body}}, {new: true})
@@ -40,7 +40,7 @@ router.put('/playlists/:id', jsonParser, (req, res) => {
       })
     })
 
-router.put('/artistograms/:id', jsonParser, (req, res) => {
+router.put('/artistograms/:id', jsonParser, jwtAuth, (req, res) => {
   console.log(req.body);
       User
       .findOneAndUpdate({username: req.params.id}, {$addToSet: {savedArtistograms: req.body}}, {new: true})
