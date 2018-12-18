@@ -98,7 +98,7 @@ router.post('/users', jsonParser, (req, res) => {
       return res.status(422).json({
         code: 422,
         reason: 'ValidationError',
-        message: 'Cannot start or end with whitespace',
+        message: 'cannot start or end with whitespace',
         location: nonTrimmedField
       });
     }
@@ -130,9 +130,9 @@ router.post('/users', jsonParser, (req, res) => {
         code: 422,
         reason: 'ValidationError',
         message: tooSmallField
-          ? `Must be at least ${sizedFields[tooSmallField]
+          ? `must be at least ${sizedFields[tooSmallField]
             .min} characters long`
-          : `Must be at most ${sizedFields[tooLargeField]
+          : `must be at most ${sizedFields[tooLargeField]
             .max} characters long`,
         location: tooSmallField || tooLargeField
       });
@@ -149,10 +149,10 @@ router.post('/users', jsonParser, (req, res) => {
       .then(count => {
         if (count > 0) {
           // There is an existing user with the same username
-          return Promise.reject({
+          return res.status(422).json({
             code: 422,
             reason: 'ValidationError',
-            message: 'username already taken',
+            message: 'already taken',
             location: 'username'
           });
         }
