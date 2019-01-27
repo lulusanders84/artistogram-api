@@ -35,7 +35,13 @@ userSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
+const spotifyIdSchema = mongoose.Schema({
+  artist: String,
+  spotifyUri: String,
+  spotifyId: String
+})
 
+const SpotifyId = mongoose.model('Spotify', spotifyIdSchema);
 const User = mongoose.model('User', userSchema);
 
-module.exports = {User};
+module.exports = {User, SpotifyId};
