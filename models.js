@@ -1,5 +1,5 @@
 'use strict';
-
+const { capitalize } = require('./capitalize');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -42,7 +42,7 @@ const spotifyIdSchema = mongoose.Schema({
 
 spotifyIdSchema.methods.serialize = function() {
   return {
-    artist: this.artist,
+    artist: capitalize(this.artist),
     spotifyId: this.spotifyId
   };
 };

@@ -7,6 +7,7 @@ const request = require('request');
 const { SPOTIFY_CLIENT_ENCODED } = require('../config');
 const authRequestUrl = "https://accounts.spotify.com/api/token";
 const searchUrl = "https://api.spotify.com/v1/search?";
+const {capitalize} = require('../capitalize');
 
 const { SpotifyId } = require('../models');
 
@@ -21,30 +22,35 @@ const fetchAndPostArtistSpotifyId = (body, artist) => {
     },
     json: true
   };
+
   return new Promise ((resolve, reject) => {
     request.get(options, function(error, response, body) {
       const idObj = {
-        artist,
+        artist: body.artists.items[0].name,
         spotifyId: body.artists.items[0].id
       }
-      postSpotifyId(idObj);
-    resolve (idObj)
+      ;
+    resolve (postSpotifyId(idObj));
   })
 })
 }
 
 const postSpotifyId = (idObj) => {
   const { artist, spotifyId } = idObj;
-  SpotifyId.create({
-    artist,
+  return SpotifyId.create({
+    artist: artist.toLowerCase(),
     spotifyId,
+  }).then(spotifyId => {
+    return spotifyId.serialize();
   })
 }
 
 router.post('/', jsonParser, (req, res) => {
 //   //req.body contains array of artists names
-  const artists = req.body.artists;
-
+  let artists = req.body.artists;
+  artists = artists.map(artist => {
+    return artist.toLowerCase();
+  })
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: {

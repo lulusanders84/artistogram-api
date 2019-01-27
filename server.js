@@ -26,7 +26,6 @@ app.use('/api/spotify-id', spotifyIdRouter);
 app.use('/api/login', authRouter);
 
 let server;
-console.log("server running");
 
 function runServer(databaseUrl, port = PORT) {
   return new Promise((resolve, reject) => {
