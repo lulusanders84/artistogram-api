@@ -2,14 +2,13 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const fetch = require('node-fetch');
 const request = require('request');
-const { SPOTIFY_CLIENT_ENCODED } = require('../config');
+const { SPOTIFY_CLIENT_ENCODED } = require('../../config');
 const authRequestUrl = "https://accounts.spotify.com/api/token";
 const searchUrl = "https://api.spotify.com/v1/search?";
-const {capitalize} = require('../capitalize');
+const {capitalize} = require('../../capitalize');
 
-const { SpotifyId } = require('../models');
+const { SpotifyId } = require('../../models');
 
 const fetchAndPostArtistSpotifyId = (body, artist) => {
   const token = body.access_token;
@@ -83,37 +82,5 @@ router.post('/', jsonParser, (req, res) => {
     }
  })
 })
-      // use the access token to access the Spotify Web API
-
-//     }
-//   });
-// });
-//   .then(token => {
-//     console.log(token, "token");
-//     const artists = req.body;
-//     return artists.map(artist => {
-//       SpotifyId
-//         .findOne({"artist": artist})
-//         .then(spotifyId => {
-//           if(spotifyId === null) {
-//             return addArtistSpotifyId(artist, token);
-//           } else {
-//             return spotifyId;
-//           }
-//         })
-//       })
-//     })
-//     .then(artistIds => {
-//       res.status(200).json(artistIds);
-//     }).catch(err => {
-//         console.error(err);
-//         res.status(500).json({message: 'Internal server error'});
-//     })
-// })
-//get request for multiple artist spotify ids
-  //if artist is not in collection
-    //api request to spotify to get id for artist
-    //then post artist to collection
-  //find artists in collection and return spotifyids
 
 module.exports = router;
