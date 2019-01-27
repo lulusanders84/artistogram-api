@@ -10,6 +10,8 @@ const { PORT } = require ('./config');
 const { DATABASE_URL } = require("./config");
 
 const userRouter = require('./routes/user-router');
+const spotifyIdRouter = require('./routes/spotify/id-router')
+const spotifyYearRouter = require('./routes/spotify/year-router')
 const { router: authRouter } = require("./auth/router");
 
 const passport = require('passport');
@@ -21,6 +23,8 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api', userRouter);
+app.use('/api/spotify/id', spotifyIdRouter);
+app.use('/api/spotify/year', spotifyYearRouter);
 app.use('/api/login', authRouter);
 
 let server;
