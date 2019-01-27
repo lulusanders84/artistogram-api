@@ -10,6 +10,7 @@ const { PORT } = require ('./config');
 const { DATABASE_URL } = require("./config");
 
 const userRouter = require('./routes/user-router');
+const spotifyIdRouter = require('./routes/spotify-id-router')
 const { router: authRouter } = require("./auth/router");
 
 const passport = require('passport');
@@ -21,9 +22,11 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api', userRouter);
+app.use('/api/spotify-id', spotifyIdRouter);
 app.use('/api/login', authRouter);
 
 let server;
+console.log("server running");
 
 function runServer(databaseUrl, port = PORT) {
   return new Promise((resolve, reject) => {

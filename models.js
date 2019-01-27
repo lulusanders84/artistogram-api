@@ -37,11 +37,17 @@ userSchema.statics.hashPassword = function(password) {
 
 const spotifyIdSchema = mongoose.Schema({
   artist: String,
-  spotifyUri: String,
   spotifyId: String
 })
 
-const SpotifyId = mongoose.model('Spotify', spotifyIdSchema);
+spotifyIdSchema.methods.serialize = function() {
+  return {
+    artist: this.artist,
+    spotifyId: this.spotifyId
+  };
+};
+
+const SpotifyId = mongoose.model('Spotify-Id', spotifyIdSchema);
 const User = mongoose.model('User', userSchema);
 
 module.exports = {User, SpotifyId};
