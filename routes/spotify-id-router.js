@@ -10,10 +10,7 @@ const searchUrl = "https://api.spotify.com/v1/search?";
 
 const { SpotifyId } = require('../models');
 
-// your application requests authorization
-
-const fetchArtistSpotifyId = (body, artist) => {
-
+const fetchAndPostArtistSpotifyId = (body, artist) => {
   const token = body.access_token;
   const artistUri = encodeURI(artist);
   const url = `${searchUrl}q=${artistUri}&type=artist&limit=1`;
@@ -26,37 +23,23 @@ const fetchArtistSpotifyId = (body, artist) => {
   };
   return new Promise ((resolve, reject) => {
     request.get(options, function(error, response, body) {
-    resolve ({
-      artist,
-      id: body.artists.items[0].id
-    })
+      const idObj = {
+        artist,
+        spotifyId: body.artists.items[0].id
+      }
+      postSpotifyId(idObj);
+    resolve (idObj)
   })
 })
 }
 
-function addArtistSpotifyId(artist, token) {
-  const artistUri = encodeURI(artist);
-  const url = `${searchUrl}q=${artistUri}&type=artist`;
-  fetch(url, {
-    method: "GET",
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  })
-  .then(res => {
-    const id = res.artists.items.id;
-    const artist = res.artists.items.name;
-    SpotifyId
-      .create({
-        artist,
-        id,
-      })
-      .then(spotifyId => {
-        return spotifyId;
-      })
+const postSpotifyId = (idObj) => {
+  const { artist, spotifyId } = idObj;
+  SpotifyId.create({
+    artist,
+    spotifyId,
   })
 }
-
 
 router.post('/', jsonParser, (req, res) => {
 //   //req.body contains array of artists names
@@ -73,7 +56,6 @@ router.post('/', jsonParser, (req, res) => {
     json: true
   };
 
-
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       let artistsData = artists.map(artist => {
@@ -81,8 +63,7 @@ router.post('/', jsonParser, (req, res) => {
            .findOne({"artist": artist})
            .then(spotifyId => {
              if(spotifyId == null) {
-               console.log("spotifyId is null", spotifyId);
-               return fetchArtistSpotifyId(body, artist);
+               return fetchAndPostArtistSpotifyId(body, artist);
              } else {
                return new Promise((resolve, reject) => {
                  return resolve(spotifyId.serialize());
@@ -91,7 +72,6 @@ router.post('/', jsonParser, (req, res) => {
            })
         })
       Promise.all(artistsData).then(spotifyIds => {
-        console.log(spotifyIds);
         res.json(spotifyIds);
       })
     }
