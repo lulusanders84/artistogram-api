@@ -1,5 +1,6 @@
 
 const capitalize = (string) => {
+  console.log("string from capitalize", string);
   string = string.split(' ');
   capitalized = string.map((word, index) => {
     if(string.length === 1 || word.length > 4 || index === 0) {
