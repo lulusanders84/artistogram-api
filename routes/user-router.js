@@ -26,7 +26,6 @@ router.get('/user/:id', jwtAuth, (req, res) => {
 })
 
 router.put('/playlists/:id', jsonParser, jwtAuth, (req, res) => {
-  console.log(req.body);
       User
       .findOneAndUpdate({username: req.params.id}, {$addToSet: {savedPlaylists: req.body}}, {new: true})
       .then(user => {
@@ -40,8 +39,7 @@ router.put('/playlists/:id', jsonParser, jwtAuth, (req, res) => {
       })
     })
 
-router.put('/artistograms/:id', jsonParser, jwtAuth, (req, res) => {
-  console.log(req.body);
+router.put('/artistograms/add/:id', jsonParser, jwtAuth, (req, res) => {
       User
       .findOneAndUpdate({username: req.params.id}, {$addToSet: {savedArtistograms: req.body}}, {new: true})
       .then(user => {
@@ -55,8 +53,21 @@ router.put('/artistograms/:id', jsonParser, jwtAuth, (req, res) => {
       })
     })
 
+router.put('/artistograms/delete/:id', jsonParser, jwtAuth, (req, res) => {
+      User
+      .findOneAndUpdate({username: req.params.id}, {$pull: {savedArtistograms: req.body}}, {new: true})
+      .then(user => {
+        res.status(200).json({
+          artistograms: user.savedArtistograms,
+          message: 'Artistogram added'
+        });
+      }).catch(err => {
+          console.error(err);
+          res.status(500).json({message: 'Internal server error'});
+      })
+    })
+
 router.post('/users', jsonParser, (req, res) => {
-  console.log(req.body);
     const requiredFields = ['username', 'password', 'email'];
     const missingField = requiredFields.find(field => !(field in req.body));
     if (missingField) {
